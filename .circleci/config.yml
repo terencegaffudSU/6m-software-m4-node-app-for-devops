@@ -43,18 +43,18 @@ workflows:
       - build:
           filters:
             branches:
-              only:main
+              only: main
       - test:
           requires:
             - build
           filters:
             branches:
-              only:main
+              only: main
       # The scan job
       - scan:
           requires:
             - build
           filters:
             branches:
-              only:main
+              only: main
       

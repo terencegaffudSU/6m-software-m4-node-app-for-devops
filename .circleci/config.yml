@@ -50,7 +50,8 @@ jobs:
             name: Heroku Container Push
             command: | 
                 heroku container:login
-                heroku container:push web -a terencegaffudsu-devops
+                docker tag terencegaffudsu/devops-tutorial:1.0.0 registry.heroku.com/terencegaffudsu-devops/web
+                docker push registry.heroku.com/terencegaffudsu-devops/web
                 heroku container:release web -a terencegaffudsu-devops
 
 workflows:

@@ -45,8 +45,7 @@ jobs:
         - setup_remote_docker      
         - heroku/install
         - docker/pull:
-            image: terencegaffudsu/devops-tutorial
-            tag: 1.0.0
+            images: terencegaffudsu/devops-tutorial:1.0.0
         - run:
             name: Heroku Container Push
             command: | 

@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.1
   docker: circleci/docker@2.1.4
+  heroku: circleci/heroku@2.0.0
 jobs:
   build:
     docker:
@@ -25,7 +26,8 @@ jobs:
           npm run test
   
   build-and-push:
-    executor: docker/docker
+    docker:
+        - image: cimg/node:16.10
     steps:
       - setup_remote_docker
       - checkout
@@ -36,6 +38,21 @@ jobs:
       - docker/push:
           image: terencegaffudsu/devops-tutorial
           tag: 1.0.0
+  deploy:
+    docker:
+        - image: cimg/node:16.10
+    steps:
+        - setup_remote_docker      
+        - heroku/install
+        - docker/pull:
+            image: terencegaffudsu/devops-tutorial
+            tag: 1.0.0
+        - run:
+            name: Heroku Container Push
+            command: | 
+                heroku container:login
+                heroku container:push web -a terencegaffudsu-devops
+                heroku container:release web -a terencegaffudsu-devops
 
 workflows:
   simple_workflow:

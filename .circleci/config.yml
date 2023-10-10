@@ -25,6 +25,7 @@ jobs:
           npm run test
   
   build-and-push:
+    executor: docker/docker
     steps:
       - setup_remote_docker
       - checkout

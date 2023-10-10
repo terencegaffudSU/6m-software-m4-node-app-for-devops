@@ -35,6 +35,7 @@ jobs:
           tag: 1.0.0
       - docker/push:
           image: terencegaffudsu/devops-tutorial
+          tag: 1.0.0
 
 workflows:
   simple_workflow:

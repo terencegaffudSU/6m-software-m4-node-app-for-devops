@@ -45,15 +45,17 @@ jobs:
         - setup_remote_docker      
         - heroku/install
         - docker/pull:
-            images: terencegaffudsu/devops-tutorial:1.0.0
+            images: terencegaffudsu/devops-tutorial:1.0.0 #image in DockerHub
         - run:
             name: Heroku Container Push
             command: | 
                 heroku container:login
                 docker tag terencegaffudsu/devops-tutorial:1.0.0 registry.heroku.com/terencegaffudsu-devops/web
+                #format: docker tag <image from docker pull> registry.heroku.com/<app-name>/web
                 docker push registry.heroku.com/terencegaffudsu-devops/web
+                #format docker push registry.heroku.com/<app-name>/web
                 heroku container:release web -a terencegaffudsu-devops
-
+                #format heroku container:release web -a <app-name>
 workflows:
   simple_workflow:
     jobs:

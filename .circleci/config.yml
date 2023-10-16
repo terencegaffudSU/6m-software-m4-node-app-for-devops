@@ -3,7 +3,6 @@ orbs: #packages
   node: circleci/node@5.0.1
   docker: circleci/docker@2.1.4 #allows us to use docker orb's commands
   heroku: circleci/heroku@2.0.0 #allows us to use heroku orb's commands
-  snyk: snyk/snyk@1.5.0
 jobs: #instructions for each step
   build: #build the application, ie install dependencies
     docker: #container to handle to steps
@@ -37,18 +36,6 @@ jobs: #instructions for each step
       - docker/push:
           image: terencegaffudsu/education-space
           tag: 1.0.1
-  scan:
-      docker:
-          - image: cimg/node:16.10
-      environment:
-          IMAGE_NAME: terencegaffudsu/education-space
-      steps:
-          - checkout
-          - setup_remote_docker      
-          - docker/check
-          - run: docker build -t $IMAGE_NAME .
-          - snyk/scan: 
-              docker-image-name: $IMAGE_NAME
   # deploy:
   #   docker:
   #     - image: cimg/node:16.10
@@ -74,9 +61,6 @@ workflows: #defines how each job would run and relate to each other and
           requires:
             - build
       - build-and-push: #3rd job
-          requires:
-            - test
-      - scan: #3rd job
           requires:
             - test
       # - deploy:

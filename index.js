@@ -6,7 +6,7 @@ const print = require("./controller");
 
 app.get('/', print);
 app.get("/hello", (req, res) => {
-    res.send("Hello from the /hello route");
+    res.send("Hello from the /hello route!");
 })
 
 app.listen(process.env.PORT, ()=>{

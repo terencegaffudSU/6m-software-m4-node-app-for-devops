@@ -50,8 +50,8 @@ workflows:
             branches:
               only: main
       - build-and-push:
-          # requires:
-          #   - test
+          requires:
+            - test
           filters:
             tags:
               only: /^v.*/

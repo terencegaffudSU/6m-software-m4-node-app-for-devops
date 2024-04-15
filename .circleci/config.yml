@@ -30,6 +30,6 @@ workflows:
   simple_workflow: # workflow name
     jobs:
       - build
-      - test
+      - test:
           requires:
             - build

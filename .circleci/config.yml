@@ -34,9 +34,11 @@ jobs:
       - docker/check
       - docker/build: #build the image
           image: terencegaffudsu/education-space
+          tag: v1.0.1
           # Mini activity #3 - add a tag called v1.0.1 and push the tag in docker hub
       - docker/push: #pushes the image to the specified account in the environment variables
           image: terencegaffudsu/education-space
+          tag: v1.0.1
   deploy:
     docker:
       - image: cimg/node:16.10
@@ -46,7 +48,7 @@ jobs:
       - checkout
       - run: 
           name: Heroku Container Push
-          commands: |
+          command: |
             heroku container:login
             heroku container:push web -a terence-su-devops
             heroku container:release web -a terence-su-devops

@@ -1,0 +1,92 @@
+
+version: 2.1
+# orbs - reusable packages for use
+orbs:
+  node: circleci/node@5.0.1
+  docker: circleci/docker@2.1.4
+  # heroku: circleci/heroku@2.0.0
+  snyk: snyk/snyk@1.5.0 #compare the node and docker orbs, the snyk orb starts with snyk and it is considered a third party orb
+# jobs - set of instructions / functions
+jobs:
+  build: # job name
+    docker: # environment
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run : |
+          echo "Installing dependencies..."
+          npm install
+  test: 
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run : |
+          echo "Running tests..."
+          npm run test
+  publish: #also known as the build-and-push
+    executor: docker/docker #define the execution environment in which the steps of a job will run.
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check
+      - docker/build: #build the image
+          image: terencegaffudsu/education-space
+          tag: v1.0.1
+      - docker/push: #pushes the image to the specified account in the environment variables
+          image: terencegaffudsu/education-space
+          tag: v1.0.1
+  deploy:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run: 
+          name: Render Push
+          command: |
+            curl "https://api.render.com/deploy/srv-cui52056l47c73f7r1m0?key=EaJnalmU4MQ"
+  scan: 
+    docker:
+      - image: cimg/node:16.10
+    environment: #the environment allows us to create an environment for the job and allows us to create custom environment variables
+      IMAGE_NAME: terencegaffudsu/education-space
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check
+      - run: docker build -t $IMAGE_NAME . #$IMAGE_NAME gets the value from the environment we created above
+      - snyk/scan:
+          docker-image-name: $IMAGE_NAME 
+# workflow - defines what sequence will the jobs run
+workflows:
+  simple_workflow: # workflow name
+    jobs:
+      - build:
+      # additional filters
+          filters:
+            branches:
+              only: main #the build job would only run when code changes are pushed to the main branch.
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
+      # The scan job:
+      - scan:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
+      - publish:
+          requires:
+            - test
+      - deploy:
+          requires:
+            - publish

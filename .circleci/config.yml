@@ -28,10 +28,6 @@ jobs:
   publish: #also known as the build-and-push
     steps:
       - setup_remote_docker
-      - docker/check
-      - docker/build: #build the image
-          image: terencegaffudsu/education-space
-          tag: latest
  
 # workflow - defines what sequence will the jobs run
 workflows:

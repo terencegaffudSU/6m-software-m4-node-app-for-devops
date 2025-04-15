@@ -25,18 +25,7 @@ jobs:
       - run : |
           echo "Running tests..."
           npm run test
-  publish: #also known as the build-and-push
-    steps:
-      - setup_remote_docker
-      - docker/check
-      - docker/build: #build the image
-          image: terencegaffudsu/education-space
-          tag: latest
-      - run : |
-            echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
-      - docker/push: #pushes the image to the specified account in the environment variables
-          image: terencegaffudsu/education-space
-          tag: latest
+ 
 # workflow - defines what sequence will the jobs run
 workflows:
   simple_workflow: # workflow name

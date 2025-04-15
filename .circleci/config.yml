@@ -28,7 +28,7 @@ jobs:
   publish: #also known as the build-and-push
     steps:
       - setup_remote_docker:
-          version: 20.10.24
+          - version: 20.10.24
       - docker/check
       - docker/build: #build the image
           image: terencegaffudsu/education-space

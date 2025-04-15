@@ -1,0 +1,53 @@
+version: 2.1
+# orbs - reusable packages for use
+orbs:
+  node: circleci/node@7.1.0
+  docker: circleci/docker@2.1.4
+# jobs - set of instructions / functions
+jobs:
+  build: # job name
+    docker: # environment
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run : |
+          echo "Installing dependencies..."
+          npm install
+  test: 
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run : |
+          echo "Running tests..."
+          npm run test
+  publish: #also known as the build-and-push
+    steps:
+      - setup_remote_docker
+          version: 20.10.24
+      - docker/check
+      - docker/build: #build the image
+          image: terencegaffudsu/education-space
+          tag: latest
+      - run : |
+          name: Login to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+      - docker/push: #pushes the image to the specified account in the environment variables
+          image: terencegaffudsu/education-space
+          tag: latest
+# workflow - defines what sequence will the jobs run
+workflows:
+  simple_workflow: # workflow name
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - publish:
+          requires:
+            - test

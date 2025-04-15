@@ -25,7 +25,7 @@ jobs:
       - run : |
           echo "Running tests..."
           npm run test
-   publish: #also known as the build-and-push
+  publish: #also known as the build-and-push
     steps:
       - setup_remote_docker
       - docker/check

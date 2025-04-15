@@ -36,14 +36,14 @@ jobs:
           version: 20.10.24
       - docker/check
       - docker/build:
-          image: fatb0y13/education-space
+          image: terencegaffudsu/education-space
           tag: latest
       - run:
           name: Login to Docker Hub
           command: |
-            echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+            echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
       - docker/push:
-          image: fatb0y13/education-space
+          image: terencegaffudsu/education-space
           tag: latest
 
 workflows:

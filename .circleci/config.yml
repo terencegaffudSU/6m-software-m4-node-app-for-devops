@@ -38,10 +38,6 @@ jobs:
       - docker/build:
           image: terencegaffudsu/education-space
           tag: latest
-      - run:
-          name: Login to Docker Hub
-          command: |
-            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin $DOCKER_PASSWORD
       - docker/push:
           image: terencegaffudsu/education-space
           tag: latest

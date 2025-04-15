@@ -32,9 +32,6 @@ jobs:
       - docker/build: #build the image
           image: terencegaffudsu/education-space
           tag: latest
-      - docker/push: #pushes the image to the specified account in the environment variables
-          image: terencegaffudsu/education-space
-          tag: latest
  
 # workflow - defines what sequence will the jobs run
 workflows:
